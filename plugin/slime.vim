@@ -20,9 +20,7 @@ noremap <unique> <script> <silent> <Plug>SendCurrentCell :<c-u>call console#Send
 noremap <unique> <script> <silent> <Plug>SendCurrentCellNext :<c-u>call console#Send(cell#GetCurrentCell(1))<cr>
 
 if !exists("g:slime_ipython_no_mappings") || !g:slime_ipython_no_mappings
-  "if !hasmapto('<Plug>SlimeRegionSend', 'x')
-    "xmap <c-c><c-c> <Plug>SlimeRegionSend
-  "endif
+    "execute 'nnoremap J :NextCell<CR>'
     nmap <A-x> <Plug>CutCurrentCell
     nmap <A-c> <Plug>CopyCurrentCell
     nmap <A-up> <Plug>PrevCell
@@ -31,4 +29,23 @@ if !exists("g:slime_ipython_no_mappings") || !g:slime_ipython_no_mappings
     nmap <F5> <Plug>SendAll
     nmap <A-Enter> <Plug>SendCurrentCellNext
 endif
+
+call submode#add(
+    \{
+    \   'name': 'cell-mode',
+    \   'mode': 'normal',
+    \   'scope': 'buffer',
+    \},
+    \ ['<M-Enter>', '<Leader><Esc>'],
+    \ ['<Enter>', 'i', 'q'],
+    \ {
+    \   '<M-Enter>': ':SendCurrentCell<CR>',
+    \   'j': ':NextCell<CR>',  " 5j
+    \   'k': ':PrevCell<CR>',
+    \   'J': ':MoveCellDown<CR>',
+    \   'K': ':MoveCellUp<CR>',
+    \   'd': ':CutCurrentCell<CR>',
+    \   'y': ':CopyCurrentCell<CR>',
+    \}
+    \)
 
