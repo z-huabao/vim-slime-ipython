@@ -7,22 +7,22 @@ let s:layout = {'position': 'bottom', 'height': 0.3}
 
 " filetype: [rpl-shell-command, paste-pre-command, paste-end-command]
 let s:repls = {
-    \ 'python': ["ipython\n", "%cpaste -q\n", "--\n"],
+    \ 'python': ["ipython3\n", "%cpaste -q\n", "--\n"],
     \ 'sh': ["shell\n", "", ""],
     \ }
 let s:repl = []
 
 " cover default config
-if exists("g:console_name")
-    let s:console_name = g:console_name
+if exists("g:slime_ipython_console_name")
+    let s:console_name = g:slime_ipython_console_name
 endif
 
-if exists("g:layout")
-    let s:layout = g:layout
+if exists("g:slime_ipython_console_layout")
+    let s:layout = g:slime_ipython_console_layout
 endif
 
-if exists("g:repls")
-    let s:repls = extend(s:repls, g:repls)
+if exists("g:slime_ipython_repls")
+    let s:repls = extend(s:repls, g:slime_ipython_repls)
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -40,8 +40,8 @@ endfunction
 function! s:NewConsole()
     " get REPL command
     if exists("&filetype")
-        let l:filetype = substitute(&filetype, "[.]", "_", "g")
-        let s:repl = get(s:repls, l:filetype, -1)
+        let filetype = substitute(&filetype, "[.]", "_", "g")
+        let s:repl = get(s:repls, filetype, -1)
     endif
 
     " create new term-buffer
@@ -57,25 +57,25 @@ function! s:NewConsole()
 endfunction
 
 function! console#ShowConsole()
-    let l:console_id = bufwinnr(s:console_name)
-    if l:console_id >? 0
+    let console_id = bufwinnr(s:console_name)
+    if console_id >? 0
         " if window exist, jump to the window
-        execute l:console_id.'wincmd w'
+        execute console_id.'wincmd w'
     else
-        let l:width  = get(s:layout, 'width', -1) * winwidth('%')
-        let l:height = get(s:layout, 'height', -1) * winheight('%')
+        let width  = get(s:layout, 'width', -1) * winwidth('%')
+        let height = get(s:layout, 'height', -1) * winheight('%')
 
         " if window not exist, create window
         execute 'split'
-        let l:layouts = {'right':'L', 'bottom':'J', 'left':'H', 'top':'K'}
-        execute "wincmd ".get(l:layouts, get(s:layout, 'position', 'bottom'), 'J')
+        let layouts = {'right':'L', 'bottom':'J', 'left':'H', 'top':'K'}
+        execute "wincmd ".get(layouts, get(s:layout, 'position', 'bottom'), 'J')
 
         " resize console window
-        if l:width >? 0
-            execute string(l:width).'wincmd |'
+        if width >? 0
+            execute string(width).'wincmd |'
         endif
-        if l:height >? 0
-            execute string(l:height).'wincmd _'
+        if height >? 0
+            execute string(height).'wincmd _'
         endif
 
         if bufexists(s:console_name)
@@ -89,10 +89,10 @@ function! console#ShowConsole()
 endfunction
 
 function! console#ToggleConsole()
-    let l:console_id = bufwinnr(s:console_name)
-    if l:console_id >? 0
+    let console_id = bufwinnr(s:console_name)
+    if console_id >? 0
         " if window exist, jump to the window
-        execute l:console_id.'wincmd w'
+        execute console_id.'wincmd w'
         wincmd q
         stopinsert
     else
