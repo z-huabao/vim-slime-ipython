@@ -21,7 +21,7 @@ command! SendCurrentCellNext call console#Send(cell#GetCurrentCell(1))
 
 
 if !exists("g:slime_ipython_no_submode") || !g:slime_ipython_no_submode
-    if !has('nvim')
+    if !has('nvim') && !has('win32') && !has('win16')
         execute "set <a-cr>=\<esc>\<cr>"
     endif
 

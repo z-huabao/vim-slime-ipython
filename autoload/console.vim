@@ -32,10 +32,15 @@ endif
 function! s:PasteInVimTerm(text)
     if len(a:text) >? 0
         let nr = bufnr('%')
-        for l in split(a:text, '\n\zs')
-            call term_sendkeys(nr, substitute(l, '\n', "\r", ''))
+        if a:text =~ '%cpaste'
+            call term_sendkeys(nr, a:text)
             call term_wait(nr)
-        endfor
+        else
+            for l in split(a:text, '\n\zs')
+                call term_sendkeys(nr, substitute(l, '\n', "\r", ''))
+                call term_wait(nr)
+            endfor
+        endif
         sleep 50ms
         startinsert
     endif
@@ -52,6 +57,8 @@ endfunction
 let s:PasteInTerm = has('nvim') ? function('s:PasteInNvimTerm')
             \: function('s:PasteInVimTerm')
 
+let s:sleep_time = (has('win32')||has('win16')) ? 2 : 1
+
 function! s:NewConsole()
     " get REPL command
     if exists("&filetype")
@@ -67,7 +74,8 @@ function! s:NewConsole()
     " start REPL
     if len(s:repl) ==? 3
         call s:PasteInTerm(s:repl[0])
-        sleep 1  " wait for ipython start
+        " wait for ipython start
+        execute 'sleep '.s:sleep_time
     endif
 endfunction
 
