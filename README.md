@@ -61,18 +61,18 @@ But there are some difference:
 
 ~~~
                                    _
-  | import numpy as np              | cell 1
+a | import numpy as np              | cell 1
   |                                _|
-a | numbers = np.arange(10)         | cell 2
+b | numbers = np.arange(10)         | cell 2
   |                                 |
   |                                _|
-b | for n in numbers:               | cell 3
-  |     print(n)                   _|
-c |     if n % 2 == 0:              |
+c | for n in numbers:               | cell 3
+  |     print(n)                    |
+  |     if n % 2 == 0:              |
   |         print("Even")           |
   |     else:                       |
   |         print("Odd")            |
   |                                _|
-d | total = numbers.sum()           | cell 5
+d | total = numbers.sum()           | cell 4
   | print("Sum: {}".format(total)) _|
 ~~~
