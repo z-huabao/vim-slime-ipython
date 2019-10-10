@@ -21,6 +21,10 @@ command! SendCurrentCellNext call console#Send(cell#GetCurrentCell(1))
 
 
 if !exists("g:slime_ipython_no_submode") || !g:slime_ipython_no_submode
+    if !has('nvim')
+        execute "set <a-cr>=\<esc>\<cr>"
+    endif
+
     let config = {
         \   'mode': 'normal',
         \   'scope': 'buffer',

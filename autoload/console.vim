@@ -29,13 +29,28 @@ endif
 " Terminal Console
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! s:PasteInTerm(text)
+function! s:PasteInVimTerm(text)
+    if len(a:text) >? 0
+        let nr = bufnr('%')
+        for l in split(a:text, '\n\zs')
+            call term_sendkeys(nr, substitute(l, '\n', "\r", ''))
+            call term_wait(nr)
+        endfor
+        sleep 50ms
+        startinsert
+    endif
+endfunction
+
+function! s:PasteInNvimTerm(text)
     if len(a:text) >? 0
         let @9 = a:text."\n"
         normal! G"9p
         sleep 50ms
     endif
 endfunction
+
+let s:PasteInTerm = has('nvim') ? function('s:PasteInNvimTerm')
+            \: function('s:PasteInVimTerm')
 
 function! s:NewConsole()
     " get REPL command
@@ -51,7 +66,7 @@ function! s:NewConsole()
 
     " start REPL
     if len(s:repl) ==? 3
-        call s:PasteInTerm(s:repl[0]."\n")
+        call s:PasteInTerm(s:repl[0])
         sleep 1  " wait for ipython start
     endif
 endfunction
@@ -66,7 +81,19 @@ function! console#ShowConsole()
         let height = get(s:layout, 'height', -1) * winheight('%')
 
         " if window not exist, create window
-        execute 'split'
+        if has('nvim') || bufexists(s:console_name)
+            execute 'split'
+        endif
+
+        if bufexists(s:console_name)
+            " if buffer exist, show in the window
+            execute 'buffer '.s:console_name
+        else
+            " if buffer not exist, create new term-buffer
+            call s:NewConsole()
+        endif
+
+        " set window position
         let layouts = {'right':'L', 'bottom':'J', 'left':'H', 'top':'K'}
         execute "wincmd ".get(layouts, get(s:layout, 'position', 'bottom'), 'J')
 
@@ -76,14 +103,6 @@ function! console#ShowConsole()
         endif
         if height >? 0
             execute string(height).'wincmd _'
-        endif
-
-        if bufexists(s:console_name)
-            " if buffer exist, show in the window
-            execute 'buffer '.s:console_name
-        else
-            " if buffer not exist, create new term-buffer
-            call s:NewConsole()
         endif
     endif
 endfunction
