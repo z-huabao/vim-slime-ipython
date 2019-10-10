@@ -56,8 +56,8 @@ You can take this plugin as [vim-slime](https://github.com/jpalardy/vim-slime) +
 
 But there are some difference:
 - only support vim-terminal(neovim or vim8) [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop), not screen, tmux , etc.
-- auto start REPL by `<A-Enter>`, and no care console-window is right or bottom.
-- diff protocol of [cell](https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Running%20Code.html).
+- auto start REPL by `<Alt-Enter>`, and no care console-window is right or bottom.
+- diff protocol of [cell](https://jupyter-notebook.readthedocs.io/en/stable/examples/Notebook/Running%20Code.html):
 
 ~~~
                                    _

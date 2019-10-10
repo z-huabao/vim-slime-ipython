@@ -21,14 +21,11 @@ command! SendCurrentCellNext call console#Send(cell#GetCurrentCell(1))
 
 
 if !exists("g:slime_ipython_no_submode") || !g:slime_ipython_no_submode
-    call submode#AddMode('cell-mode',
-        \{
+    let config = {
         \   'mode': 'normal',
         \   'scope': 'buffer',
         \   'enter_keys': [],
         \   'leave_keys': ['<CR>', 'q', 'i', 'a'],
-        \   'enter_func': 'cell#HighLightSpace',
-        \   'leave_func': 'cell#HighLightSpace',
         \   'maps': {
         \       '<M-CR>': ':SendCurrentCellNext<CR>',
         \       'j': ':NextCell<CR>',
@@ -39,16 +36,21 @@ if !exists("g:slime_ipython_no_submode") || !g:slime_ipython_no_submode
         \       'yy': ':CopyCurrentCell<CR>',
         \   }
         \}
-        \)
-endif
 
-if !exists("g:slime_ipython_no_highlight") || !g:slime_ipython_no_highlight
-    syntax match CellSpace /^$/
-    highlight CellSpace guibg=gray30 ctermbg=20
-    sign define cell_space linehl=CellSpace
-    augroup AutoHighLightCellSpace
-        autocmd TextChanged * call cell#HighLightSpace()
-    augroup endgroup
+    if !exists("g:slime_ipython_no_highlight") || !g:slime_ipython_no_highlight
+        syntax match CellSpace /^$/
+        highlight CellSpace guibg=gray30 ctermbg=20
+        sign define cell_space linehl=CellSpace
+
+        augroup AutoHighLightCellSpace
+            autocmd TextChanged * call cell#HighLightSpace()
+        augroup endgroup
+
+        let config['enter_func'] = 'cell#HighLightSpace'
+        let config['leave_func'] = 'cell#HighLightSpace'
+    endif
+
+    call submode#AddMode('cell-mode', config)
 endif
 
 if !exists("g:slime_ipython_no_mappings") || !g:slime_ipython_no_mappings
