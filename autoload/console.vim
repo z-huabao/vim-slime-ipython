@@ -33,7 +33,7 @@ function! s:PasteInVimTerm(text)
     if len(a:text) >? 0
         let nr = bufnr('%')
         if a:text =~ '%cpaste'
-            call term_sendkeys(nr, a:text)
+            call term_sendkeys(nr, a:text."\n")
             call term_wait(nr)
         else
             for l in split(a:text, '\n\zs')
