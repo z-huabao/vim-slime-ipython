@@ -11,12 +11,15 @@ Plug 'z-huabao/submode'
 Plug 'z-huabao/vim-slime-ipython'
 ```
 #### config
-If you don't want to use `cell-mode`: `let g:slime_ipython_no_submode = 1`
+Toggle highlight cell space: `let g:slime_ipython_no_highlight = 1`,
+or change the highlight color: `highlight CellSpace guibg=gray30 ctermbg=20`
 
-And if no highlight the cell space: `let g:slime_ipython_no_highlight = 1`
+Do not use `cell-mode`: `let g:slime_ipython_no_submode = 1`
 
-Use self define kep maps: `let g:slime_ipython_no_mapping = 1`
+Use self define kep maps: 
 ```vim
+let g:slime_ipython_no_mapping = 1
+
 " show or hide REPL terminal-console
 nnoremap <Leader>t :ToggleConsole<CR>
 
@@ -76,3 +79,4 @@ c | for n in numbers:               | cell 3
 d | total = numbers.sum()           | cell 4
   | print("Sum: {}".format(total)) _|
 ~~~
+- [cell-mode](https://github.com/z-huabao/vim-submode) manage
