@@ -7,7 +7,7 @@
 ## Install
 #### vim-plug
 ```vim
-Plug 'z-huabao/submode'
+Plug 'z-huabao/vim-submode'
 Plug 'z-huabao/vim-slime-ipython'
 ```
 #### config
@@ -16,7 +16,7 @@ or change the highlight color: `highlight CellSpace guibg=gray30 ctermbg=20`
 
 Do not use `cell-mode`: `let g:slime_ipython_no_submode = 1`
 
-Use self define kep maps: 
+Use self define kep maps:
 ```vim
 let g:slime_ipython_no_mapping = 1
 
